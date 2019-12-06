@@ -11,6 +11,11 @@ fifteenList = []
 someList = []
 saleList = []
 hotdealList = []
+
+genre = ['romance', 'fantasy', 'bl']
+ser = '_serial'
+# zip 써서 각 장르별로 받아올 예정
+# 
 for i in range(1,10):
     url = 'https://ridibooks.com/event/romance?type=ago&page='+str(i)
     html = urlopen(url, context=context)
