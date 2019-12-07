@@ -6,7 +6,13 @@ context = ssl._create_unverified_context()
 urllib.error.URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1076)> 
 위와같은 오류가 생겨서 ssl import 함 (구글 검색으로 해결법 찾음)
 '''
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ebook_site.settings")
 
+import django
+django.setup()
+
+from parsed_data.models import ebookData
 
 fifteenList = []
 someList = []
@@ -71,6 +77,9 @@ def getBooksMetadata ():
     
     return data
 
-
+if __name__=='__main__':
+    dataDict = getBooksMetadata()
+    for t, l in dataDict.items():
+        ebookData(title = t, link=l).save()
 #for e in fifteenList+someList+saleList+hotdealList:
 #    print(e)
