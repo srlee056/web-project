@@ -20,8 +20,9 @@ ser = '_serial'
 # 두 리스트의 조합을 구하는데 더 나은 방법이 있을까?
 # from itertools import product
 
+
 for g in genre:
-    for i in range(1,3):
+    for i in range(1,2):
         url = 'https://ridibooks.com/event/'+g+'?type=ago&page='+str(i)
         html = urlopen(url, context=context)
         bsObject = BeautifulSoup(html.read(), "html.parser")
@@ -33,8 +34,9 @@ for g in genre:
             link = eventDesc.get('href')
             if link.startswith('/'):
                 link = ''.join(["https://ridibooks.com",link])
-            eventDate = event.find('li',{'class':'contents_descript'}).find('span',{'class':'descript_body'}).text.strip()
-            print(eventDate)
+            eventDate = event.find('li',{'class':'contents_descript'}).find('span',{'class':'descript_body'})
+            #parsing date to datetime https://stackoverflow.com/questions/8636760/parsing-a-datetime-string-into-a-django-datetimefield/24228410
+            #print(eventDate)
             if '십오야' in text:
                 fifteenList.append({text:link})
             elif 'SOME' in text:
@@ -44,9 +46,31 @@ for g in genre:
                 saleList.append({text:link})
             elif 'HOT DEAL' in text:
                 hotdealList.append({text:link})
+
+#for e in fifteenList :
+#    url = e.link
+
+#method that get metadata of books from event page. 
+def getBooksMetadata ():
+    booklist = []
+    url2 = 'https://ridibooks.com/event/18237'
+    html2 = urlopen(url2, context=context)
+    bsObject2 = BeautifulSoup(html2.read(), "html.parser")
+
+    subgroup = bsObject2.find_all('div', {'id':'subgroup1'})
+    for g in subgroup:
+        #books = g.find_all('h3', {'class':'meta_title'}).
+        books = g.select(
+            'h3 > a'
+        )
+        booklist +=books
+
+    data = {}
+    for b in booklist:
+        data[b.text.strip()] = ''.join(['https://ridibooks.com',b.get('href')])
     
-for e in fifteenList :
-    url = e.link
+    return data
+
 
 #for e in fifteenList+someList+saleList+hotdealList:
 #    print(e)
