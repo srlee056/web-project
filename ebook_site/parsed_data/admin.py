@@ -1,4 +1,6 @@
 from django.contrib import admin
-from .models import ebookData
+from .models import EbookData, EventData, EventLog
 
-admin.site.register(ebookData)
+admin.site.register(EbookData)
+admin.site.register(EventData)
+admin.site.register(EventLog)
